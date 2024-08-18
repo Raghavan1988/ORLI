@@ -47,14 +47,14 @@ def fetch_recent_activity(linkedin_url):
 
 # Function to compose a personalized message using OpenAI GPT-4o
 def compose_message(linkedin_info, query_info, recent_activity):
-    prompt = f"Compose a concise outreach message (less than 1000 characters) that references the target's recent activity and connects it with the sender's profile. Include a call to action and make sure the message is personalized and specific.\
-        Read and understand the Recent Activity of the Target, Understand the Sender's LinkedIn Info and the Query Info. Compose an outreach message that is specific. The PROFESSIONAL LIFE of the Sender depends on this. \
+    prompt = f"Compose a concise outreach message (less than 1000 characters) on behalf of SENDER that references the TARGET's recent activity and connects it with the sender's profile. Include a call to action and make sure the message is personalized and specific.\
+        Read and understand the Recent Activity of the Target, Understand the Sender's LinkedIn Info and the Query Info. Compose an outreach message that is specific. The PROFESSIONAL LIFE of the SENDER depends on this. \
             Provide evidence URLs in the explanation section at the bottom. Generate two sections: Outreach Message and Explanation with URLs."
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "You are an assistant composing a professional outreach message who writes very specific messages."},
-            {"role": "user", "content": f"Sender's LinkedIn Info: {linkedin_info}\nQuery Info: {query_info}\nRecent Activity of the Target: {recent_activity} {prompt}"}
+            {"role": "system", "content": "You are an assistant composing a professional outreach message on behalf of a SENDER who writes very specific messages to TARGET."},
+            {"role": "user", "content": f"SENDER LinkedIn Info: {linkedin_info} Query Info: {query_info} Recent Activity of the TARGET: {recent_activity} {prompt}"}
         ]
     )
     
