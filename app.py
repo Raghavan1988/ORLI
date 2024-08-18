@@ -37,7 +37,7 @@ def search_linkedin(query):
 # Function to fetch recent LinkedIn activity using YOU.com
 def fetch_recent_activity(linkedin_url):
     headers = {"X-API-Key": you_com_api_key}
-    params = {"query": "Research about the person on internet, get evidence URLs Linkedin Profile: " + linkedin_url}
+    params = {"query": "Research about the person on internet. What does this person do : " + linkedin_url}
     response = requests.get(
         f"https://api.ydc-index.io/search?query={linkedin_url}",
         params=params,
@@ -56,12 +56,12 @@ Guidelines:
 Understanding Phase:
 
 Step 1: Thoroughly review TARGET's recent LinkedIn activities, such as posts, comments, or updates, to identify relevant topics or interests.
-Step 2: Examine SENDER's LinkedIn Info, paying close attention to their professional experience, expertise, and current objectives.
+Step 2: Examine SENDER's LinkedIn Info, paying close attention to their professional experience, expertise.
 Step 3: Analyze the Query Info, ensuring you grasp the context and purpose behind this outreach.
 Composing Phase:
 
-Step 4: Reflect on the insights from the understanding phase. Formulate a message that naturally connects TARGET's recent activities with SENDER's profile. Use emotional appeal to highlight the significance of this connection.
-Step 5: Craft a personalized, specific outreach message that resonates with TARGET's interests or needs. The message should clearly convey SENDER's intentions and include a strong, action-oriented call to action.
+Step 4: Reflect on the insights from the understanding phase. Formulate a message that naturally connects TARGET's profile with SENDER's profile. Use emotional appeal to highlight the significance of this connection.
+Step 5: Craft a personalized, specific outreach message that resonates with TARGET's title or needs. The message should clearly convey SENDER's intentions and include a strong, action-oriented call to action.
 Step 6: Consider the gravity of this outreach—SENDER's professional life may depend on this. Aim for a message that stands out and makes a memorable impact.
 Explanation Phase:
 
