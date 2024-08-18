@@ -37,7 +37,7 @@ def search_linkedin(query):
 # Function to fetch recent LinkedIn activity using YOU.com
 def fetch_recent_activity(linkedin_url):
     headers = {"X-API-Key": you_com_api_key}
-    params = {"query": "Research about this linkedin profile and get URLs " + linkedin_url}
+    params = {"query": "Research about the person on internet, get evidence URLs Linkedin Profile: " + linkedin_url}
     response = requests.get(
         f"https://api.ydc-index.io/search?query={linkedin_url}",
         params=params,
@@ -47,9 +47,31 @@ def fetch_recent_activity(linkedin_url):
 
 # Function to compose a personalized message using OpenAI GPT-4o
 def compose_message(linkedin_info, query_info, recent_activity):
-    prompt = f"Compose a concise outreach message (less than 1000 characters) on behalf of SENDER that references the TARGET's recent activity and connects it with the sender's profile. Include a call to action and make sure the message is personalized and specific.\
-        Read and understand the Recent Activity of the Target, Understand the Sender's LinkedIn Info and the Query Info. Compose an outreach message that is specific. The PROFESSIONAL LIFE of the SENDER depends on this. \
-            Provide evidence URLs in the explanation section at the bottom. Generate two sections: Outreach Message and Explanation with URLs."
+    
+    prompt = """
+    Objective: Compose a highly effective outreach message on behalf of SENDER that leverages TARGET's recent LinkedIn activity and aligns it with SENDER's professional background and goals. The message should be concise (under 1000 characters), personalized, and include a compelling call to action. The success of SENDER's career could hinge on this outreach.
+
+Guidelines:
+
+Understanding Phase:
+
+Step 1: Thoroughly review TARGET's recent LinkedIn activities, such as posts, comments, or updates, to identify relevant topics or interests.
+Step 2: Examine SENDER's LinkedIn Info, paying close attention to their professional experience, expertise, and current objectives.
+Step 3: Analyze the Query Info, ensuring you grasp the context and purpose behind this outreach.
+Composing Phase:
+
+Step 4: Reflect on the insights from the understanding phase. Formulate a message that naturally connects TARGET's recent activities with SENDER's profile. Use emotional appeal to highlight the significance of this connection.
+Step 5: Craft a personalized, specific outreach message that resonates with TARGET's interests or needs. The message should clearly convey SENDER's intentions and include a strong, action-oriented call to action.
+Step 6: Consider the gravity of this outreach—SENDER's professional life may depend on this. Aim for a message that stands out and makes a memorable impact.
+Explanation Phase:
+
+Step 7: In a separate section labeled "Explanation with URLs," provide the evidence and rationale behind your message. Include relevant URLs that reference TARGET's recent activity and any other supporting information.
+Output Format:
+
+Outreach Message: [Write the message here.]
+
+Explanation with URLs: [Provide your explanation and relevant URLs here.]
+    """
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
