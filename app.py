@@ -75,7 +75,7 @@ Explanation with URLs: [Provide your explanation and relevant URLs here.]
         model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are an assistant composing a professional outreach message on behalf of a SENDER who writes very specific messages to TARGET."},
-            {"role": "user", "content": f"SENDER LinkedIn Info: {linkedin_info} Query Info: {query_info} Recent Activity of the TARGET: {recent_activity} {prompt}"}
+            {"role": "user", "content": f"SENDER LinkedIn Info: {linkedin_info} SENDER is {intent} Query Info: {query_info} Recent Activity of the TARGET: {recent_activity} {prompt}"}
         ]
     )
     
