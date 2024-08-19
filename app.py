@@ -12,7 +12,7 @@ serp_api_key = '367c5285f63f94ff76b2d97e362663a510d6875a26a7f9947106388d0be5e33a
 # Function to fetch LinkedIn information using YOU.com
 def get_ai_snippets_for_query(query):
     headers = {"X-API-Key": you_com_api_key}
-    params = {"query": query}
+    params = {"query": query + " identify the name and title"}
     response = requests.get(
         f"https://api.ydc-index.io/search?query={query}",
         params=params,
@@ -37,7 +37,7 @@ def search_linkedin(query):
 # Function to fetch recent LinkedIn activity using YOU.com
 def fetch_recent_activity(linkedin_url):
     headers = {"X-API-Key": you_com_api_key}
-    params = {"query": "Research about the person on internet. What does this person do : " + linkedin_url}
+    params = {"query": "Research about the person on internet. Identify name and title, What does this person do : " + linkedin_url}
     response = requests.get(
         f"https://api.ydc-index.io/search?query={linkedin_url}",
         params=params,
