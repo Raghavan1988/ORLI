@@ -12,7 +12,7 @@ serp_api_key = '367c5285f63f94ff76b2d97e362663a510d6875a26a7f9947106388d0be5e33a
 # Function to fetch LinkedIn information using YOU.com
 def get_ai_snippets_for_query(query):
     headers = {"X-API-Key": you_com_api_key}
-    params = {"query": query + " identify the name and title"}
+    params = {"query": query}
     response = requests.get(
         f"https://api.ydc-index.io/search?query={query}",
         params=params,
@@ -37,7 +37,7 @@ def search_linkedin(query):
 # Function to fetch recent LinkedIn activity using YOU.com
 def fetch_recent_activity(linkedin_url):
     headers = {"X-API-Key": you_com_api_key}
-    params = {"query": "Research about the person on internet. Identify name and title, What does this person do : " + linkedin_url}
+    params = {"query": "Research about the person on internet. What does this person do : " + linkedin_url}
     response = requests.get(
         f"https://api.ydc-index.io/search?query={linkedin_url}",
         params=params,
@@ -46,58 +46,26 @@ def fetch_recent_activity(linkedin_url):
     return response
 
 # Function to compose a personalized message using OpenAI GPT-4o
-def compose_message(linkedin_info, query_info, recent_activity, intent):
+def compose_message(linkedin_info, query_info, recent_activity, intent, selling_product=None):
+    selling_info = f"SENDER is trying to sell {selling_product}. " if selling_product else ""
     prompt = f"""
-   Objective: Compose a highly effective outreach message on behalf of SENDER that leverages TARGET's recent LinkedIn activity and aligns it with SENDER's professional background and goals. The intent of the SENDER is {intent}. The message should be concise (under 1000 characters), personalized, and include a compelling call to action. The success of SENDER's career could hinge on this outreach.
+    Objective: Compose a highly effective outreach message on behalf of SENDER that leverages TARGET's recent LinkedIn activity and aligns it with SENDER's professional background and goals. The intent of the SENDER is {intent}. {selling_info}The message should be concise (under 1000 characters), personalized, and include a compelling call to action. The success of SENDER's career could hinge on this outreach.
 
-Tree of Thoughts Approach:
+Guidelines:
 
 Understanding Phase:
-Step 1:
 
-Root Thought: Begin by thoroughly exploring TARGET's recent LinkedIn activities (posts, comments, or updates).
-Branch 1: Identify recurring themes or topics that are important to TARGET.
-Branch 2: Pinpoint specific instances where TARGET has expressed strong opinions or enthusiasm.
-Branch 3: Determine how these activities reflect TARGET's professional goals and challenges.
-Step 2:
-
-Root Thought: Delve into SENDER's LinkedIn profile with a focus on their professional experience, expertise, and intent.
-Branch 1: Identify key accomplishments and areas of expertise relevant to TARGET's interests.
-Branch 2: Consider how SENDER's current role and objectives align with the intent (e.g., Seller, Hiring Manager, Job Seeker, General Networking).
-Branch 3: Look for connections between SENDER's background and TARGET's recent activities.
-Step 3:
-
-Root Thought: Analyze the Query Info to fully understand the context and purpose of the outreach.
-Branch 1: Understand the immediate goal of the outreach (e.g., making a sale, securing a job, building a network).
-Branch 2: Consider how this goal aligns with both SENDER’s and TARGET's professional trajectories.
-Branch 3: Evaluate the potential benefits for both parties.
+Step 1: Thoroughly review TARGET's recent LinkedIn activities, such as posts, comments, or updates, to identify relevant topics or interests.
+Step 2: Examine SENDER's LinkedIn Info, paying close attention to their professional experience, expertise, and intent.
+Step 3: Analyze the Query Info, ensuring you grasp the context and purpose behind this outreach.
 Composing Phase:
-Step 4:
 
-Root Thought: Synthesize the insights gathered from the Understanding Phase.
-Branch 0: Identify the TARGET's name, title, current company
-Branch 1: Formulate a message that naturally connects TARGET's profile with SENDER's profile, establishing a mutual interest.
-Branch 2: Infuse the message with emotional prompts that emphasize the importance of this connection. Highlight shared values, goals, or challenges.
-Branch 3: Ensure the tone is empathetic and resonates with TARGET's needs, making them feel understood and valued.
-Step 5:
-
-Root Thought: Craft a personalized, specific outreach message.
-Branch 1: The message should directly address TARGET's title or recent activities.
-Branch 2: Clearly convey SENDER's intentions and how they can provide value or support.
-Branch 3: Include a strong, action-oriented call to action that encourages TARGET to respond or engage.
-Step 6:
-
-Root Thought: Reflect on the gravity of the outreach.
-Branch 1: The message should not only stand out but also emotionally connect with TARGET.
-Branch 2: Highlight how this outreach is a critical step in SENDER's career, creating a sense of urgency.
-Branch 3: Aim for a memorable impact that motivates TARGET to take the desired action.
+Step 4: Reflect on the insights from the understanding phase. Formulate a message that naturally connects TARGET's profile with SENDER's profile. Use emotional appeal to highlight the significance of this connection.
+Step 5: Craft a personalized, specific outreach message that resonates with TARGET's title or needs. The message should clearly convey SENDER's intentions and include a strong, action-oriented call to action.
+Step 6: Consider the gravity of this outreach—SENDER's professional life may depend on this. Aim for a message that stands out and makes a memorable impact.
 Explanation Phase:
-Step 7:
 
-Root Thought: Provide evidence and rationale behind the crafted message.
-Branch 1: In a section labeled "Explanation with URLs," list relevant URLs that reference TARGET's recent activity.
-Branch 2: Explain how these activities were used to tailor the outreach message.
-Branch 3: Justify the emotional and strategic elements included in the message, ensuring TARGET sees the value in the connection.
+Step 7: In a separate section labeled "Explanation with URLs," provide the evidence and rationale behind your message. Include relevant URLs that reference TARGET's recent activity and any other supporting information.
 Output Format:
 
 Outreach Message: [Write the message here.]
@@ -108,7 +76,7 @@ Explanation with URLs: [Provide your explanation and relevant URLs here.]
         model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are an assistant composing a professional outreach message on behalf of a SENDER who writes very specific messages to TARGET."},
-            {"role": "user", "content": f"SENDER LinkedIn Info: {linkedin_info} SENDER is {intent} Query Info: {query_info} Recent Activity of the TARGET: {recent_activity} {prompt}"}
+            {"role": "user", "content": f"SENDER LinkedIn Info: {linkedin_info} SENDER is {intent}. {selling_info} Query Info: {query_info} Recent Activity of the TARGET: {recent_activity} {prompt}"}
         ]
     )
     
@@ -133,9 +101,13 @@ def main():
 
         # Step 2: Select Intent
         intent = st.selectbox("Select Your Intent:", ["Seller", "Hiring Manager", "Job Seeker", "General Networking"])
-        
 
-        # Step 3: Enter Query or Target LinkedIn Profile
+        # Step 3: If intent is Seller, ask for the product or service being sold
+        selling_product = None
+        if intent == "Seller":
+            selling_product = st.text_input("What are you trying to sell?")
+
+        # Step 4: Enter Query or Target LinkedIn Profile
         query = st.text_input("Enter a Query (e.g., company, area, title) or Target LinkedIn Profile:")
 
         if query:
@@ -161,7 +133,7 @@ def main():
                             st.write("Recent LinkedIn Activity Retrieved Successfully.")
                             
                             # Compose the message and explanation
-                            message, explanation = compose_message(linkedin_info, query, recent_activity, intent)
+                            message, explanation = compose_message(linkedin_info, query, recent_activity, intent, selling_product)
                             st.markdown(f"**Outreach Message:**\n\n{message}\n")
                             st.markdown(f"**Why This Outreach Makes Sense:**\n{explanation}")
                             st.write("---")  # Separator between results
