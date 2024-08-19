@@ -46,17 +46,16 @@ def fetch_recent_activity(linkedin_url):
     return response
 
 # Function to compose a personalized message using OpenAI GPT-4o
-def compose_message(linkedin_info, query_info, recent_activity):
-    
-    prompt = """
-    Objective: Compose a highly effective outreach message on behalf of SENDER that leverages TARGET's recent LinkedIn activity and aligns it with SENDER's professional background and goals. The message should be concise (under 1000 characters), personalized, and include a compelling call to action. The success of SENDER's career could hinge on this outreach.
+def compose_message(linkedin_info, query_info, recent_activity, intent):
+    prompt = f"""
+    Objective: Compose a highly effective outreach message on behalf of SENDER that leverages TARGET's recent LinkedIn activity and aligns it with SENDER's professional background and goals. The intent of the SENDER is {intent}. The message should be concise (under 1000 characters), personalized, and include a compelling call to action. The success of SENDER's career could hinge on this outreach.
 
 Guidelines:
 
 Understanding Phase:
 
 Step 1: Thoroughly review TARGET's recent LinkedIn activities, such as posts, comments, or updates, to identify relevant topics or interests.
-Step 2: Examine SENDER's LinkedIn Info, paying close attention to their professional experience, expertise.
+Step 2: Examine SENDER's LinkedIn Info, paying close attention to their professional experience, expertise, and intent.
 Step 3: Analyze the Query Info, ensuring you grasp the context and purpose behind this outreach.
 Composing Phase:
 
@@ -99,7 +98,10 @@ def main():
         linkedin_info = get_ai_snippets_for_query(linkedin_url)
         st.write("LinkedIn Information Retrieved Successfully.")
 
-        # Step 2: Enter Query or Target LinkedIn Profile
+        # Step 2: Select Intent
+        intent = st.selectbox("Select Your Intent:", ["Seller", "Hiring Manager", "Job Seeker", "General Networking"])
+
+        # Step 3: Enter Query or Target LinkedIn Profile
         query = st.text_input("Enter a Query (e.g., company, area, title) or Target LinkedIn Profile:")
 
         if query:
@@ -123,7 +125,7 @@ def main():
                             st.write("Recent LinkedIn Activity Retrieved Successfully.")
                             
                             # Compose the message and explanation
-                            message, explanation = compose_message(linkedin_info, query, recent_activity)
+                            message, explanation = compose_message(linkedin_info, query, recent_activity, intent)
                             st.markdown(f"**Outreach Message:**\n\n{message}\n")
                             st.markdown(f"**Why This Outreach Makes Sense:**\n{explanation}")
                             st.write("---")  # Separator between results
