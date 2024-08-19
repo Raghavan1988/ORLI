@@ -100,11 +100,14 @@ def main():
 
         # Step 2: Select Intent
         intent = st.selectbox("Select Your Intent:", ["Seller", "Hiring Manager", "Job Seeker", "General Networking"])
+        
 
         # Step 3: Enter Query or Target LinkedIn Profile
         query = st.text_input("Enter a Query (e.g., company, area, title) or Target LinkedIn Profile:")
 
         if query:
+            st.write(f"Selected intent: {intent}")
+
             # Check if the query is a LinkedIn URL
             if "linkedin.com/in/" in query:
                 # Fetch information about the LinkedIn profile directly
