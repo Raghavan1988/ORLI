@@ -7,7 +7,7 @@ client = OpenAI()
 
 # API keys
 you_com_api_key = '127e2b97-2dca-451c-be4a-71dd1e39d6da<__>1PjWKvETU8N2v5f4ktus5haY'
-serp_api_key = '367c5285f63f94ff76b2d97e362663a510d6875a26a7f9947106388d0be5e33a'
+serp_api_key = '094fb9c8b7681884b7767b5aa08925d50fcdf26906e69ebe7b18a854aeb3aeb3'
 
 # Function to fetch LinkedIn information using YOU.com
 def get_ai_snippets_for_query(query):
